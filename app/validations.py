@@ -2,7 +2,7 @@ import re
 
 from app.db.models import Item
 from app.forms import ItemForm
-from app.utils.exceptions import ValidateExeption
+from app.utils.exceptions import ValidateExeption, NotFoundExeption
 from app.utils.utils import findFoldersInImports
 
 
@@ -58,3 +58,31 @@ def validateItems(items: list[ItemForm], database) -> bool:
         raise ValidateExeption("Invalid item")
     return True
 
+def validateUrl(url_headers:list[str], database):
+    if url_headers[-1] == "":
+        url_headers.pop(-1)
+
+    if not (url_headers and url_headers[0].lower() == 'home'):
+        raise ValidateExeption("Invalid item")
+    if "" in url_headers:
+        raise ValidateExeption("Invalid item")
+
+    for i in range(1, len(url_headers)):
+        item = database.query(Item).filter(Item.id == url_headers[i]).one_or_none()
+        if item:
+            if item.type == 'FOLDER':
+                if i + 1 < len(url_headers):
+                    next_item = database.query(Item).filter(Item.id == url_headers[i+1]).one_or_none()
+                    if next_item:
+                        if item.id == next_item.parentId:
+                            continue
+                        else:
+                            raise ValidateExeption("Invalid item")
+                    else:
+                        raise NotFoundExeption("Item not found")   
+                else:
+                    continue
+            else:
+                raise ValidateExeption("Invalid item")
+        else:
+            raise NotFoundExeption("Item not found")

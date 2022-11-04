@@ -12,4 +12,4 @@ DATABASE_URL = f'sqlite:///{root_dir}' + config('DB_NAME', cast=str)
 VERSION = '0.1'
 PROJECT_NAME = 'Yet Another Disk Open API'
 PROJECT_DESCRIPTION = 'Вступительное задание в Осеннюю Школу Бэкенд Разработки Яндекса 2022'
-BASE_ROUTER='Базовые задачи'
+BASE_ROUTER='Задачи'

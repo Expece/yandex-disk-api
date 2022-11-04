@@ -11,7 +11,7 @@ from app.config import DATABASE_URL
 def create_db():
     engine = create_engine(DATABASE_URL)
     session = Session(bind=engine.connect())
-    session.execute("""create table  IF NOT EXISTS items(
+    session.execute("""create table IF NOT EXISTS items(
         id varchar(256) primary key,
         parentId varchar(256),
         url varchar(255) NULL,
