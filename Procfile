@@ -1,1 +1,1 @@
-web: uvicorn app.main:app --port 8080 --host 0.0.0.0
+web: uvicorn app.main:app --port=$PORT --host 0.0.0.0
