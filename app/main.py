@@ -11,7 +11,7 @@ from app.config import DATABASE_URL
 def create_db():
     engine = create_engine(DATABASE_URL)
     session = Session(bind=engine.connect())
-    session.execute("""create table items(
+    session.execute("""create table  IF NOT EXISTS items(
         id varchar(256) primary key,
         parentId varchar(256),
         url varchar(255) NULL,
@@ -24,8 +24,7 @@ def create_db():
 
 
 def get_application() -> FastAPI:
-    if not os.path.exists('fastapi_app.db'):
-        create_db()
+    create_db()
     application = FastAPI(title=PROJECT_NAME,
                           version=VERSION,
                           description=PROJECT_DESCRIPTION)
